@@ -105,9 +105,9 @@ def it_targetsets_query_algo(atts):
     nb_atts = len(atts)
 
     # In total we want to ask no more than: max_nb_ts_sizes*max_nb_queries
-    max_nb_ts_sizes = 20    # Amount of different targetset sizes to check
-    max_nb_queries = 20     # Amount of queries per targetset size
-    ratio_t_to_tot = 0.4    # Percentage of nb_atts to predict in one queries
+    max_nb_ts_sizes = 20  # Amount of different targetset sizes to check
+    max_nb_queries = 20  # Amount of queries per targetset size
+    ratio_t_to_tot = 0.4  # Percentage of nb_atts to predict in one queries
     max_ts_size = nb_atts * ratio_t_to_tot  # Largest targetset allowed
 
     # linspace + unique takes care of never taking too much different sizes
@@ -293,11 +293,11 @@ def make_queries_dict(q_desc,
     """
 
     d = {}
-    d['queries'] = {'desc_sets':    q_desc,
-                    'targ_sets':    q_targ,
-                    'miss_sets':    q_miss,
-                    'keyword':      q_keyword,
-                    'param':        q_param}
+    d['queries'] = {'desc_sets': q_desc,
+                    'targ_sets': q_targ,
+                    'miss_sets': q_miss,
+                    'keyword': q_keyword,
+                    'param': q_param}
     return d
 
 
@@ -338,12 +338,12 @@ def check_given_query_codes(nb_atts, **kwargs):
     for k in relevant_keywords:
         if k in {'q_code', 'query_code'}:
             assert len(kwargs[k]) == nb_atts
-            q_codes = [kwargs[k]]               # Single code put in array
+            q_codes = [kwargs[k]]  # Single code put in array
 
             return q_codes
         elif k in {'q_codes', 'query_codes'}:
             assert len(kwargs[k][0]) == nb_atts
-            q_codes = kwargs[k]                 # Multiple codes left untouched
+            q_codes = kwargs[k]  # Multiple codes left untouched
 
             return q_codes
         else:
@@ -394,12 +394,12 @@ def generate_query_code(nb_atts,
     """
 
     # Some automatic procedures if we are given some freedom.
-    if desc_size == None and miss_size == None:
+    if desc_size is None and miss_size is None:
         desc_size = nb_atts - targ_size  # All the rest is assumed descriptive
         miss_size = 0
-    elif desc_size != None and miss_size == None:
+    elif desc_size is not None and miss_size is None:
         miss_size = nb_atts - targ_size - desc_size
-    elif desc_size == None and miss_size != None:
+    elif desc_size is None and miss_size is not None:
         desc_size = nb_atts - targ_size - miss_size
     else:
         pass
@@ -423,7 +423,7 @@ def desc_to_miss(code, amount=1):
 
     changes, i = 0, 0
 
-    while (i < len(code) and changes < amount):
+    while i < len(code) and changes < amount:
         if code[i] == 0:
             code[i] = -1
             changes += 1
@@ -469,7 +469,8 @@ def code_to_query(code, atts=None):
     TODO(elia): The coding strategy is still hardcoded here. Fix this.
     """
 
-    if atts is None: atts = list(range(len(code)))
+    if atts is None:
+        atts = list(range(len(code)))
     assert len(code) == len(atts)
 
     desc = [x for i, x in enumerate(atts) if code[i] == 0]

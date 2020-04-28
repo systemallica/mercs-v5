@@ -1,19 +1,19 @@
-import numpy as np
 import os
-import pandas as pd
 import sys
-
 from os.path import dirname
 
-# Custom import (Add src to the path)
-root_directory = dirname(dirname(dirname(dirname(__file__))))
-for dname in {'src'}:
-    sys.path.insert(0, os.path.join(root_directory, dname))
+import numpy as np
+import pandas as pd
 
 import datasets as datasets
 from mercs.core import MERCS
 from mercs.utils.encoding import encode_attribute
 from tests.utils.eval import verify_nominal_prediction, verify_numeric_prediction
+
+# Custom import (Add src to the path)
+root_directory = dirname(dirname(dirname(dirname(__file__))))
+for dname in {'src'}:
+    sys.path.insert(0, os.path.join(root_directory, dname))
 
 
 def setup():
@@ -24,13 +24,13 @@ def setup():
     train['season'] = pd.factorize(train['season'])[0]
     test['season'] = pd.factorize(test['season'])[0]
 
-    ind_parameters = {'ind_type':           'RF',
-                      'ind_n_estimators':   10,
-                      'ind_max_depth':      4}
+    ind_parameters = {'ind_type': 'RF',
+                      'ind_n_estimators': 10,
+                      'ind_max_depth': 4}
 
-    sel_parameters = {'sel_type':           'Base',
-                      'sel_its':            8,
-                      'sel_param':          2}
+    sel_parameters = {'sel_type': 'Base',
+                      'sel_its': 8,
+                      'sel_param': 2}
 
     model.fit(train, **ind_parameters, **sel_parameters)
 
@@ -42,7 +42,6 @@ def setup():
 
 
 def evaluate(y_true, y_pred, clf_labels_targets):
-
     for t_idx, clf_labels_targ in enumerate(clf_labels_targets):
         single_y_true = y_true[:, t_idx]
         single_y_pred = y_pred[:, t_idx].astype(int)
@@ -70,9 +69,9 @@ def evaluate(y_true, y_pred, clf_labels_targets):
 def test_MI():
     train, test, code, model, y_true, target_boolean = setup()
 
-    pred_parameters = {'pred_type':     'MI',
-                       'pred_param':    0.95,
-                       'pred_its':      0.1}
+    pred_parameters = {'pred_type': 'MI',
+                       'pred_param': 0.95,
+                       'pred_its': 0.1}
 
     y_pred = model.predict(test,
                            **pred_parameters,
@@ -90,9 +89,9 @@ def test_MI():
 def test_MA():
     train, test, code, model, y_true, target_boolean = setup()
 
-    pred_parameters = {'pred_type':     'MA',
-                       'pred_param':    0.95,
-                       'pred_its':      0.1}
+    pred_parameters = {'pred_type': 'MA',
+                       'pred_param': 0.95,
+                       'pred_its': 0.1}
 
     y_pred = model.predict(test,
                            **pred_parameters,
@@ -110,9 +109,9 @@ def test_MA():
 def test_MAFI():
     train, test, code, model, y_true, target_boolean = setup()
 
-    pred_parameters = {'pred_type':     'MAFI',
-                       'pred_param':    0.95,
-                       'pred_its':      0.1}
+    pred_parameters = {'pred_type': 'MAFI',
+                       'pred_param': 0.95,
+                       'pred_its': 0.1}
 
     y_pred = model.predict(test,
                            **pred_parameters,
@@ -130,9 +129,9 @@ def test_MAFI():
 def test_IT():
     train, test, code, model, y_true, target_boolean = setup()
 
-    pred_parameters = {'pred_type':     'IT',
-                       'pred_param':    0.1,
-                       'pred_its':      8}
+    pred_parameters = {'pred_type': 'IT',
+                       'pred_param': 0.1,
+                       'pred_its': 8}
 
     y_pred = model.predict(test,
                            **pred_parameters,

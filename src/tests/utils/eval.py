@@ -5,6 +5,7 @@ from sklearn.metrics import (mean_absolute_error,
                              mean_squared_error,
                              mean_squared_log_error,
                              f1_score)
+
 warnings.filterwarnings(action='ignore', category=UndefinedMetricWarning)
 
 
@@ -29,5 +30,3 @@ def verify_nominal_prediction(y_true, y_pred):
     assert 0 <= obs <= 1
 
     return
-
-

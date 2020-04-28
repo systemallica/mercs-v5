@@ -1,11 +1,15 @@
-import numpy as np
 import os
 import sys
 import warnings
-
 from os.path import dirname
+
+import numpy as np
 from sklearn.exceptions import UndefinedMetricWarning
 from sklearn.metrics import f1_score
+
+import datasets as datasets
+from mercs.core import MERCS
+from mercs.utils.encoding import encode_attribute
 
 warnings.filterwarnings(action='ignore', category=UndefinedMetricWarning)
 
@@ -14,22 +18,18 @@ root_directory = dirname(dirname(dirname(dirname(__file__))))
 for dname in {'src'}:
     sys.path.insert(0, os.path.join(root_directory, dname))
 
-from mercs.core import MERCS
-from mercs.utils.encoding import encode_attribute
-import datasets as datasets
-
 
 def setup_classification():
     train, test = datasets.load_nursery()
     model = MERCS()
 
-    ind_parameters = {'ind_type':           'RF',
-                      'ind_n_estimators':   10,
-                      'ind_max_depth':      4}
+    ind_parameters = {'ind_type': 'RF',
+                      'ind_n_estimators': 10,
+                      'ind_max_depth': 4}
 
-    sel_parameters = {'sel_type':           'Base',
-                      'sel_its':            4,
-                      'sel_param':          2}
+    sel_parameters = {'sel_type': 'Base',
+                      'sel_its': 4,
+                      'sel_param': 2}
 
     model.fit(train, **ind_parameters, **sel_parameters)
 
@@ -43,9 +43,9 @@ def setup_classification():
 def test_MI_classification():
     train, test, code, model, y_true = setup_classification()
 
-    pred_parameters = {'pred_type':     'MI',
-                       'pred_param':    0.95,
-                       'pred_its':      0.1}
+    pred_parameters = {'pred_type': 'MI',
+                       'pred_param': 0.95,
+                       'pred_its': 0.1}
 
     y_pred = model.predict(test,
                            **pred_parameters,
@@ -65,9 +65,9 @@ def test_MI_classification():
 def test_MA_classification():
     train, test, code, model, y_true = setup_classification()
 
-    pred_parameters = {'pred_type':     'MA',
-                       'pred_param':    0.95,
-                       'pred_its':      0.1}
+    pred_parameters = {'pred_type': 'MA',
+                       'pred_param': 0.95,
+                       'pred_its': 0.1}
 
     y_pred = model.predict(test,
                            **pred_parameters,
@@ -87,9 +87,9 @@ def test_MA_classification():
 def test_MAFI_classification():
     train, test, code, model, y_true = setup_classification()
 
-    pred_parameters = {'pred_type':     'MAFI',
-                       'pred_param':    0.95,
-                       'pred_its':      0.1}
+    pred_parameters = {'pred_type': 'MAFI',
+                       'pred_param': 0.95,
+                       'pred_its': 0.1}
 
     y_pred = model.predict(test,
                            **pred_parameters,
@@ -109,9 +109,9 @@ def test_MAFI_classification():
 def test_IT_classification():
     train, test, code, model, y_true = setup_classification()
 
-    pred_parameters = {'pred_type':     'IT',
-                       'pred_param':    0.1,
-                       'pred_its':      8}
+    pred_parameters = {'pred_type': 'IT',
+                       'pred_param': 0.1,
+                       'pred_its': 8}
 
     y_pred = model.predict(test,
                            **pred_parameters,
@@ -126,6 +126,7 @@ def test_IT_classification():
         assert isinstance(obs, (int, float))
         assert 0 <= obs <= 1
     return
+
 
 """
 def test_RW_classification():

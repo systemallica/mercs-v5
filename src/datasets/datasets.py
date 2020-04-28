@@ -4,11 +4,12 @@ import pandas as pd
 
 from os.path import dirname
 
+from mercs.utils.debug import debug_print
+
 # Custom import (Add src to the path)
 root_directory = dirname(dirname(dirname(__file__)))
 for dname in {'src'}:
     sys.path.append(os.path.join(root_directory, dname))
-from mercs.utils.debug import debug_print
 
 VERBOSITY = 0
 

@@ -1,18 +1,18 @@
 # Standard imports
-import numpy as np
 import os
 import sys
 from os.path import dirname
+
+import numpy as np
+
+from mercs.algo.induction import *
 
 # Custom imports
 root_directory = dirname(dirname(dirname(dirname(__file__))))
 for dname in {'src'}:
     sys.path.insert(0, os.path.join(root_directory, dname))
 
-from mercs.algo.induction import *
 
-
-# Actual Things
 def test_induce_clf():
     s = {'type': 'DT'}
 

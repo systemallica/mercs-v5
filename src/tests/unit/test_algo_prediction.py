@@ -1,22 +1,23 @@
 # Standard imports
 import os
-import numpy as np
 import sys
 from os.path import dirname
+
+import numpy as np
+
+from mercs.algo.prediction import (mi_pred_algo,
+                                   ma_pred_algo,
+                                   mafi_pred_algo)
 
 # Custom imports
 root_directory = dirname(dirname(dirname(dirname(__file__))))
 for dname in {'src'}:
     sys.path.insert(0, os.path.join(root_directory, dname))
 
-from mercs.algo.prediction import (mi_pred_algo,
-                                   ma_pred_algo,
-                                   mafi_pred_algo)
-
 
 def mi_setup():
     nb_mods, nb_atts = 3, 5
-    nb_qrys = nb_atts # One query per attribute
+    nb_qrys = nb_atts  # One query per attribute
 
     m_codes = np.full((nb_mods, nb_atts), 0)
     m_codes[0, -1] = 1
@@ -31,10 +32,8 @@ def mi_setup():
 def ma_setup():
     nb_mods, nb_atts, nb_qrys, m_codes, q_codes = mi_setup()
 
-    settings = {'param':    0.95,
-                'its':      0.1}
-
-
+    settings = {'param': 0.95,
+                'its': 0.1}
 
     return nb_mods, nb_atts, nb_qrys, m_codes, q_codes, settings
 

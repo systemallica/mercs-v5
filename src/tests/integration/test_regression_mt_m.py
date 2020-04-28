@@ -1,13 +1,17 @@
-import numpy as np
 import os
 import sys
 import warnings
-
 from os.path import dirname
+
+import numpy as np
 from sklearn.exceptions import UndefinedMetricWarning
 from sklearn.metrics import (mean_absolute_error,
                              mean_squared_error,
                              mean_squared_log_error)
+
+from mercs.core import MERCS
+from mercs.utils.encoding import encode_attribute
+import datasets as datasets
 
 warnings.filterwarnings(action='ignore', category=UndefinedMetricWarning)
 
@@ -16,22 +20,18 @@ root_directory = dirname(dirname(dirname(dirname(__file__))))
 for dname in {'src'}:
     sys.path.insert(0, os.path.join(root_directory, dname))
 
-from mercs.core import MERCS
-from mercs.utils.encoding import encode_attribute
-import datasets as datasets
-
 
 def setup_regression():
     train, test = datasets.load_slump()
     model = MERCS()
 
-    ind_parameters = {'ind_type':           'RF',
-                      'ind_n_estimators':   10,
-                      'ind_max_depth':      4}
+    ind_parameters = {'ind_type': 'RF',
+                      'ind_n_estimators': 10,
+                      'ind_max_depth': 4}
 
-    sel_parameters = {'sel_type':           'Base',
-                      'sel_its':            4,
-                      'sel_param':          2}
+    sel_parameters = {'sel_type': 'Base',
+                      'sel_its': 4,
+                      'sel_param': 2}
 
     model.fit(train, **ind_parameters, **sel_parameters)
 
@@ -45,9 +45,9 @@ def setup_regression():
 def test_MI_regression():
     train, test, code, model, y_true = setup_regression()
 
-    pred_parameters = {'pred_type':     'MI',
-                       'pred_param':    0.95,
-                       'pred_its':      0.1}
+    pred_parameters = {'pred_type': 'MI',
+                       'pred_param': 0.95,
+                       'pred_its': 0.1}
 
     y_pred = model.predict(test,
                            **pred_parameters,
@@ -69,9 +69,9 @@ def test_MI_regression():
 def test_MA_regression():
     train, test, code, model, y_true = setup_regression()
 
-    pred_parameters = {'pred_type':     'MA',
-                       'pred_param':    0.95,
-                       'pred_its':      0.1}
+    pred_parameters = {'pred_type': 'MA',
+                       'pred_param': 0.95,
+                       'pred_its': 0.1}
 
     y_pred = model.predict(test,
                            **pred_parameters,
@@ -92,9 +92,9 @@ def test_MA_regression():
 def test_MAFI_regression():
     train, test, code, model, y_true = setup_regression()
 
-    pred_parameters = {'pred_type':     'MAFI',
-                       'pred_param':    0.95,
-                       'pred_its':      0.1}
+    pred_parameters = {'pred_type': 'MAFI',
+                       'pred_param': 0.95,
+                       'pred_its': 0.1}
 
     y_pred = model.predict(test,
                            **pred_parameters,
@@ -115,9 +115,9 @@ def test_MAFI_regression():
 def test_IT_regression():
     train, test, code, model, y_true = setup_regression()
 
-    pred_parameters = {'pred_type':     'IT',
-                       'pred_param':    0.1,
-                       'pred_its':      8}
+    pred_parameters = {'pred_type': 'IT',
+                       'pred_param': 0.1,
+                       'pred_its': 8}
 
     y_pred = model.predict(test,
                            **pred_parameters,
