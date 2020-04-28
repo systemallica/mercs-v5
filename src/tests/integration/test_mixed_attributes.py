@@ -1,23 +1,14 @@
-import os
-import sys
-from os.path import dirname
-
 import numpy as np
 import pandas as pd
 
-import datasets as datasets
+import datasets as ds
 from mercs.core import MERCS
 from mercs.utils.encoding import encode_attribute
 from tests.utils.eval import verify_nominal_prediction, verify_numeric_prediction
 
-# Custom import (Add src to the path)
-root_directory = dirname(dirname(dirname(dirname(__file__))))
-for dname in {'src'}:
-    sys.path.insert(0, os.path.join(root_directory, dname))
-
 
 def setup():
-    train, test = datasets.load_fertility()
+    train, test = ds.load_fertility()
     model = MERCS()
 
     # Ensure attributes are correctly recognized as nominal/numeric

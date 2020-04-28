@@ -1,28 +1,15 @@
-import os
-import sys
-import warnings
-from os.path import dirname
-
 import numpy as np
-from sklearn.exceptions import UndefinedMetricWarning
 from sklearn.metrics import (mean_absolute_error,
                              mean_squared_error,
                              mean_squared_log_error)
 
 from mercs.core import MERCS
 from mercs.utils.encoding import encode_attribute
-import datasets as datasets
-
-warnings.filterwarnings(action='ignore', category=UndefinedMetricWarning)
-
-# Custom import (Add src to the path)
-root_directory = dirname(dirname(dirname(dirname(__file__))))
-for dname in {'src'}:
-    sys.path.insert(0, os.path.join(root_directory, dname))
+import datasets as ds
 
 
 def setup_regression():
-    train, test = datasets.load_slump()
+    train, test = ds.load_slump()
     model = MERCS()
 
     ind_parameters = {'ind_type': 'RF',

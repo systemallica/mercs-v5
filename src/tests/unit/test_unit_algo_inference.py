@@ -1,8 +1,3 @@
-# Standard imports
-import os
-import sys
-from os.path import dirname
-
 import numpy as np
 
 from mercs.algo.inference import (init_predictions,
@@ -11,11 +6,6 @@ from mercs.algo.inference import (init_predictions,
                                   predict_values_from_proba,
                                   merge_numer,
                                   merge_proba)
-
-# Custom imports
-root_directory = dirname(dirname(dirname(dirname(__file__))))
-for dname in {'src'}:
-    sys.path.insert(0, os.path.join(root_directory, dname))
 
 
 def test_init_predictions():

@@ -1,26 +1,14 @@
 import numpy as np
-import os
-import sys
-import warnings
 
-from os.path import dirname
-from sklearn.exceptions import UndefinedMetricWarning
 from sklearn.metrics import f1_score
 
 from mercs.core import MERCS
 from mercs.utils.encoding import encode_attribute
-import datasets as datasets
-
-warnings.filterwarnings(action='ignore', category=UndefinedMetricWarning)
-
-# Custom import (Add src to the path)
-root_directory = dirname(dirname(dirname(dirname(__file__))))
-for dname in {'src'}:
-    sys.path.insert(0, os.path.join(root_directory, dname))
+import datasets as ds
 
 
 def setup_classification():
-    train, test = datasets.load_nursery()
+    train, test = ds.load_nursery()
     model = MERCS()
 
     ind_parameters = {'ind_type':           'RF',

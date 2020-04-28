@@ -1,6 +1,6 @@
 import json
 
-from sklearn.preprocessing import Imputer
+from sklearn.impute import SimpleImputer
 from timeit import default_timer
 
 from ..algo.induction import base_ind_algo
@@ -21,6 +21,7 @@ from ..utils.metadata import (get_metadata_df,
                               only_numeric_targ)
 
 from ..utils.debug import debug_print
+
 VERBOSITY = 0
 
 
@@ -102,7 +103,7 @@ class MERCS(object):
         msg = """
         metadata of our model is: {}
         """.format(self.s['metadata'])
-        debug_print(msg,V=VERBOSITY)
+        debug_print(msg, V=VERBOSITY)
 
         self.update_settings(mode='fit', **kwargs)
         self.fit_imputator(X)
@@ -117,8 +118,8 @@ class MERCS(object):
                                                            self.s['metadata'])
         # 4. Post processing
         tock = default_timer()
-        self.update_settings(mode='metadata')   # Save info on learned models
-        self.update_settings(mode='model_data', mod_ind_time=tock-tick)
+        self.update_settings(mode='metadata')  # Save info on learned models
+        self.update_settings(mode='model_data', mod_ind_time=tock - tick)
 
         return
 
@@ -201,7 +202,7 @@ class MERCS(object):
         del X_query
 
         tock = default_timer()
-        self.update_settings(mode='model_data', mod_inf_time=tock-tick)
+        self.update_settings(mode='model_data', mod_inf_time=tock - tick)
 
         return Y_proba
 
@@ -239,7 +240,7 @@ class MERCS(object):
 
         # 3. Post processing
         tock = default_timer()
-        self.update_settings(mode='model_data', mod_inf_time=tock-tick)
+        self.update_settings(mode='model_data', mod_inf_time=tock - tick)
 
         return
 
@@ -269,9 +270,9 @@ class MERCS(object):
         :return:
         """
 
-        if mode in {'induction','ind'}:
+        if mode in {'induction', 'ind'}:
             self.s['induction'] = new_settings
-        elif mode in {'selection','sel'}:
+        elif mode in {'selection', 'sel'}:
             self.s['selection'] = new_settings
         elif mode in {'prediction', 'pred'}:
             self.s['prediction'] = new_settings
@@ -289,7 +290,7 @@ class MERCS(object):
             # Assuming that new_settings has keys induction and selection
             self.import_settings(new_settings['induction'], mode='induction')
             self.import_settings(new_settings['selection'], mode='selection')
-        elif mode in {'predict','batch_predict'}:
+        elif mode in {'predict', 'batch_predict'}:
             # Assuming that new_settings has key prediction
             self.import_settings(new_settings['prediction'], mode='prediction')
         else:
@@ -310,29 +311,29 @@ class MERCS(object):
         :return:
         """
 
-        if mode in {'induction','ind'}:
+        if mode in {'induction', 'ind'}:
             self.s['induction'] = filter_kwargs_update_settings(self.s['induction'],
                                                                 prefix='ind',
                                                                 delimiter=delimiter,
                                                                 **kwargs)
-        elif mode in {'selection','sel'}:
+        elif mode in {'selection', 'sel'}:
             self.s['selection'] = filter_kwargs_update_settings(self.s['selection'],
                                                                 prefix='sel',
                                                                 delimiter=delimiter,
                                                                 **kwargs)
-        elif mode in {'prediction','pred'}:
+        elif mode in {'prediction', 'pred'}:
             self.s['prediction'] = filter_kwargs_update_settings(self.s['prediction'],
                                                                  prefix='pred',
                                                                  delimiter=delimiter,
                                                                  **kwargs)
-        elif mode in {'queries','queries', 'q', 'qry'}:
+        elif mode in {'queries', 'queries', 'q', 'qry'}:
             nb_atts = self.s['metadata'].get('nb_atts', 0)
             if nb_atts > 1:
                 self.s['queries'] = update_query_settings(self.s['queries'],
                                                           nb_atts,
                                                           delimiter=delimiter,
                                                           **kwargs)
-        elif mode in {'metadata','md'}:
+        elif mode in {'metadata', 'md'}:
             self.s['metadata'] = update_meta_data(self.s['metadata'],
                                                   self.m_list,
                                                   self.m_codes)
@@ -344,7 +345,7 @@ class MERCS(object):
         elif mode in {'fit'}:
             self.update_settings(mode='induction', delimiter=delimiter, **kwargs)
             self.update_settings(mode='selection', delimiter=delimiter, **kwargs)
-        elif mode in {'predict','batch_predict'}:
+        elif mode in {'predict', 'batch_predict'}:
             self.update_settings(mode='prediction', delimiter=delimiter, **kwargs)
             self.update_settings(mode='queries', delimiter=delimiter, **kwargs)
         else:
@@ -365,9 +366,7 @@ class MERCS(object):
 
         This to fill in missing values later on.
         """
-        imputator = Imputer(missing_values='NaN',
-                            strategy='most_frequent',
-                            axis=0)
+        imputator = SimpleImputer(strategy='most_frequent')
         imputator.fit(X)
 
         self.imputator = imputator
@@ -464,7 +463,7 @@ class MERCS(object):
             X = X_Y[:, :len(m_desc[m_idx])]
             Y = X_Y[:, len(m_desc[m_idx]):]
 
-            msg="""
+            msg = """
             X.shape: {}\n
             Y.shape: {}\n
             """.format(X.shape, Y.shape)
@@ -527,8 +526,8 @@ class MERCS(object):
 
         # Prelims
         new_settings = {**settings,
-                        'clf_labels':   metadata['clf_labels'],
-                        'FI':           metadata['FI']} # TODO(elia): This is crap!
+                        'clf_labels': metadata['clf_labels'],
+                        'FI': metadata['FI']}  # TODO(elia): This is crap!
 
         # Actual work
         if new_settings['type'] == 'MI':
@@ -558,7 +557,8 @@ class MERCS(object):
         elif new_settings['type'] == 'IT':
             mas, aas = it_pred_algo(m_codes, q_codes, new_settings)
             for i, query_code in enumerate(q_codes):
-                mas[i], aas[i] = full_prune_strat(m_codes, q_codes[i], mas[i], aas[i]) #TODO(elia) This should not happen here
+                mas[i], aas[i] = full_prune_strat(m_codes, q_codes[i], mas[i],
+                                                  aas[i])  # TODO(elia) This should not happen here
             query_models = self.strat_to_model(m_list,
                                                m_codes,
                                                q_codes,
@@ -648,8 +648,8 @@ class MERCS(object):
         self.m_codes = np.concatenate((own_codes, new_codes))
         self.m_list.extend(other.m_list)
 
-        self.q_models = None # Just a reset
-        self.update_settings(mode='metadata') # Save info on learned models
+        self.q_models = None  # Just a reset
+        self.update_settings(mode='metadata')  # Save info on learned models
 
         return
 

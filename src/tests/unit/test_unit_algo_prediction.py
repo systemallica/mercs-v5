@@ -1,18 +1,8 @@
-# Standard imports
-import os
-import sys
-from os.path import dirname
-
 import numpy as np
 
 from mercs.algo.prediction import (mi_pred_algo,
                                    ma_pred_algo,
                                    mafi_pred_algo)
-
-# Custom imports
-root_directory = dirname(dirname(dirname(dirname(__file__))))
-for dname in {'src'}:
-    sys.path.insert(0, os.path.join(root_directory, dname))
 
 
 def mi_setup():
