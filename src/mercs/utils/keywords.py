@@ -33,24 +33,23 @@ def kw_ind_forests():
 
 
 def kw_sel_type():
-
-    keywords = {'base':     {'base',
-                             'Base'},
-                'random':   {'rnd',
-                             'random',
-                             'Random'}}
+    keywords = {'base': {'base',
+                         'Base'},
+                'random': {'rnd',
+                           'random',
+                           'Random'}}
 
     return keywords
 
 
 def kw_qry_codes():
-    keywords = {'query_code':   {'q_code',
-                                 'qry_code',
-                                 'queries',
-                                 'query_code'},
+    keywords = {'query_code': {'q_code',
+                               'qry_code',
+                               'queries',
+                               'query_code'},
 
-                'query_codes':  {'q_codes',
-                                 'qry_codes',
-                                 'queries',
-                                 'query_codes'}}
+                'query_codes': {'q_codes',
+                                'qry_codes',
+                                'queries',
+                                'query_codes'}}
     return keywords

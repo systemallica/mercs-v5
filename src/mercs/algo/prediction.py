@@ -21,6 +21,7 @@ import warnings
 from ..utils.encoding import codes_to_query, encode_attribute
 
 from ..utils.debug import debug_print
+
 VERBOSITY = 0
 
 
@@ -48,7 +49,6 @@ def mi_pred_algo(m_codes, q_codes):
 
 
 def _mi_pred_qry(mas, aas, q_desc, q_targ, m_codes):
-
     steps = [1]
 
     # Zero-step
@@ -106,7 +106,6 @@ def ma_pred_algo(m_codes, q_codes, settings):
 
 
 def _ma_pred_qry(mas, aas, q_desc, q_targ, m_codes, thresholds):
-
     steps = [1]
 
     # Zero-step
@@ -183,7 +182,6 @@ def _mafi_pred_qry(mas,
                    m_codes,
                    thresholds,
                    feature_importances):
-
     steps = [1]
 
     # Zero-step
@@ -233,7 +231,7 @@ def it_pred_algo(m_codes, q_codes, settings):
     assert 1 <= max_layers
     assert 0.0 < step_size < 1.0
 
-    feature_importances = settings['FI'] # TODO: This must not come packed in 'settings'
+    feature_importances = settings['FI']  # TODO: This must not come packed in 'settings'
 
     # Preliminaries
     nb_mods, nb_atts, nb_qrys = _extract_global_numbers(m_codes, q_codes)
@@ -265,7 +263,6 @@ def _it_pred_qry(mas,
                  thresholds,
                  feature_importances,
                  steps):
-
     # Zero-step
     aas[q_desc] = 0
 
@@ -385,15 +382,15 @@ def rw_pred_algo(m_codes, q_codes, settings):
 
     max_layers = settings['its']
     assert isinstance(max_layers, int) and 1 <= max_layers
-    chain_size = np.random.randint(1, max_layers + 1)   # Chain size at least one
+    chain_size = np.random.randint(1, max_layers + 1)  # Chain size at least one
 
-    feature_importances = settings['FI'] # TODO: This must not come packed in 'settings'
+    feature_importances = settings['FI']  # TODO: This must not come packed in 'settings'
 
     # Preliminaries
     nb_mods, nb_atts, nb_qrys = _extract_global_numbers(m_codes, q_codes)
     q_desc, q_targ, _ = codes_to_query(q_codes)
 
-    steps = list(range(1, 1 + chain_size))              # Chain size at least one (it is correct that this +1 happens twice!)
+    steps = list(range(1, 1 + chain_size))  # Chain size at least one (it is correct that this +1 happens twice!)
     steps.reverse()
 
     mas, aas = _init_mas_aas(nb_mods, nb_atts, nb_qrys)
@@ -442,12 +439,12 @@ def _rw_pred_qry(mas,
         avl_mods:       {}\n
         avl_m_codes:    {}\n
         """.format(i, n, avl_atts, avl_mods, avl_m_codes)
-        debug_print(msg, level=2 ,V=VERBOSITY)
+        debug_print(msg, level=2, V=VERBOSITY)
 
         # 2. Collection of potential active targets
         if i == 0:
             pot_act_atts = _active_atts(q_targ)
-            assert pot_act_atts.shape[0] == 1         # TODO: multi-target RW
+            assert pot_act_atts.shape[0] == 1  # TODO: multi-target RW
         else:
             unavailable_atts = _unavailable_atts(aas)
             next_mods = np.where(mas == n + 1)
@@ -539,7 +536,6 @@ def _available_mods(mas):
     Parameters
     ----------
     mas
-    step
 
     Returns
     -------
@@ -615,7 +611,7 @@ def _active_mods_ma(avl_atts, act_atts, avl_mods, avl_m_codes, thresholds):
         overlap_avl_desc_atts = np.sum(m_code[avl_atts] == desc_encoding)
         total_count_desc_atts = np.sum(m_code[:] == desc_encoding)
 
-        avl_mods_appr_scores[m_idx] = overlap_avl_desc_atts/total_count_desc_atts
+        avl_mods_appr_scores[m_idx] = overlap_avl_desc_atts / total_count_desc_atts
 
     # Activate models with sufficiently high appropriateness scores
     for threshold in thresholds:
@@ -690,7 +686,7 @@ def _active_mods_rw(avl_atts,
 
     act_mods = avl_mods[act_mods_idx]
 
-    assert act_mods.shape[0] > 0 # Important assertion
+    assert act_mods.shape[0] > 0  # Important assertion
     return act_mods
 
 

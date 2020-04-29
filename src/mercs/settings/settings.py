@@ -1,11 +1,12 @@
-import numpy as np
 import warnings
 
-from ..utils.encoding import codes_to_query, encode_attribute
+import numpy as np
+
 from ..utils.classlabels import collect_and_verify_clf_classlabels
+from ..utils.debug import debug_print
+from ..utils.encoding import codes_to_query, encode_attribute
 from ..utils.metadata import collect_feature_importances
 
-from ..utils.debug import debug_print
 VERBOSITY = 0
 
 
@@ -20,29 +21,25 @@ def create_settings():
         Dictionary of default settings
     """
 
-    settings = {}
-
-    settings['induction'] = {'type':    'DT'}
-
-    settings['selection'] = {'type':    'Base',
-                             'its':     1,
-                             'param':   1}
-
-    settings['prediction'] = {'type':   'MI',
-                              'its':    0.1,
-                              'param':  0.95}
-
-    settings['queries'] = {}
-
-    settings['metadata'] = {}
-
-    settings['model_data'] = {}
+    settings = {'induction': {'type': 'DT'},
+                'selection': {
+                    'type': 'Base',
+                    'its': 1,
+                    'param': 1
+                },
+                'prediction': {
+                    'type': 'MI',
+                    'its': 0.1,
+                    'param': 0.95
+                },
+                'queries': {},
+                'metadata': {},
+                'model_data': {}}
 
     return settings
 
 
 def filter_kwargs_update_settings(s, prefix=None, delimiter='_', **kwargs):
-
     param_map = _compile_param_map(prefix=prefix, delimiter=delimiter, **kwargs)
     return _update_settings_dict(s, param_map, **kwargs)
 
@@ -148,7 +145,7 @@ def update_query_settings(s, nb_atts, delimiter='_', **kwargs):
     else:
         # Nothing provided in kwargs, we check what is already present.
         codes = s.get('codes', None)
-        update_query_settings(s, nb_atts, qry_codes=codes) # N.B.: Do NOT pass the delimiter here!
+        update_query_settings(s, nb_atts, qry_codes=codes)  # N.B.: Do NOT pass the delimiter here!
 
     return s
 
@@ -251,8 +248,8 @@ def _generate_default_query_code(nb_atts):
     """
     assert isinstance(nb_atts, int) and nb_atts >= 2
 
-    desc_encoding = encode_attribute(0,[0],[1])
-    targ_encoding = encode_attribute(1,[0],[1])
+    desc_encoding = encode_attribute(0, [0], [1])
+    targ_encoding = encode_attribute(1, [0], [1])
 
     q_code = np.full(nb_atts, desc_encoding)
     q_code[-1] = targ_encoding
@@ -262,7 +259,6 @@ def _generate_default_query_code(nb_atts):
 
 
 def _verify_decent_query_codes(codes, nb_atts):
-
     if codes is None:
         msg = """
         Provided query codes:\t{}\n

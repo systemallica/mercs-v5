@@ -44,12 +44,12 @@ def get_metadata_df(df):
                   for t, v, n in zip(types, nb_uvalues, has_nan)]
     is_nominal = np.array(is_nominal).astype(int)
 
-    metadata = {'types':        types,
-                'has_nan':      has_nan,
-                'is_nominal':   is_nominal,
-                'nb_atts':      nb_atts,
-                'nb_tuples':    nb_tuples,
-                'nb_values':    nb_uvalues}
+    metadata = {'types': types,
+                'has_nan': has_nan,
+                'is_nominal': is_nominal,
+                'nb_atts': nb_atts,
+                'nb_tuples': nb_tuples,
+                'nb_values': nb_uvalues}
 
     return metadata
 

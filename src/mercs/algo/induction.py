@@ -20,6 +20,7 @@ from ..utils.metadata import only_nominal_targ, only_numeric_targ
 from ..utils.keywords import *
 
 from ..utils.debug import debug_print
+
 VERBOSITY = 0
 
 
@@ -105,7 +106,7 @@ def induce_clf(s):
     """
 
     mod_type = s['type']
-    params = {k:v for k,v in s.items() if not k in {'type', 'flatten'}}
+    params = {k: v for k, v in s.items() if k not in {'type', 'flatten'}}
 
     if mod_type in kw_ind_trees():
         clf = DecisionTreeClassifier(**params)
@@ -127,16 +128,14 @@ def induce_rgr(s):
     """
 
     mod_type = s['type']
-    params = {k:v for k, v in s.items() if not {'type', 'flatten'}}
+    params = {k: v for k, v in s.items() if not {'type', 'flatten'}}
 
     if mod_type in kw_ind_trees():
         rgr = DecisionTreeRegressor(**params)
     elif mod_type in kw_ind_forests():
         rgr = RandomForestRegressor(**params)
     else:
-        msg = "Did nog recognize regressor type: {}".format(mod_type)
+        msg = "Did not recognize regressor type: {}".format(mod_type)
         raise TypeError(msg)
 
     return rgr
-
-

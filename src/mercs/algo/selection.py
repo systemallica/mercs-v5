@@ -15,10 +15,10 @@ license:
     Apache License, Version 2.0, see LICENSE for details.
 """
 
-import numpy as np
 import warnings
 
-from sklearn.cluster.bicluster import SpectralBiclustering
+import numpy as np
+from sklearn.cluster import SpectralBiclustering
 from sklearn.ensemble import *
 
 
@@ -78,16 +78,16 @@ def base_selection_algo(metadata, settings, target_atts_list=None):
         nb_out_atts = 1
 
     # Number of models per partition
-    nb_models_part = int(np.ceil(nb_target_atts/nb_out_atts))
+    nb_models_part = int(np.ceil(nb_target_atts / nb_out_atts))
     # Total number of models
-    nb_models = int(nb_partitions*nb_models_part)
+    nb_models = int(nb_partitions * nb_models_part)
 
     # One code per model
-    codes = [[]]*nb_models
+    codes = [[]] * nb_models
 
     # We start with everything descriptive
     for tree in range(nb_models):
-        codes[tree] = [0]*nb_atts
+        codes[tree] = [0] * nb_atts
 
     for partition in range(nb_partitions):
         for attribute in target_atts_list:
@@ -101,17 +101,17 @@ def base_selection_algo(metadata, settings, target_atts_list=None):
                 # Avoiding infinite loop
                 if iter > nb_models_part:
                     break
-            codes[partition*nb_models_part + random_model][attribute] = 1
+            codes[partition * nb_models_part + random_model][attribute] = 1
 
     codes = np.array(codes)
 
     return codes
 
 
-def fi_selection_algo(metadata, settings, X, target_atts_list = None):
+def fi_selection_algo(metadata, settings, X, target_atts_list=None):
     fi_scores = get_fi_scores(X, target_atts_list, metadata)
     n_clusters = (int(settings['selection']['param']), 2)
-    model = SpectralBiclustering(n_clusters = n_clusters,
+    model = SpectralBiclustering(n_clusters=n_clusters,
                                  method='log')
     model.fit(fi_scores)
     cluster_labels = model.row_labels_
@@ -123,12 +123,12 @@ def get_fi_scores(X, target_atts_list, metadata):
     nb_atts = X.shape[1]
     nb_target_atts = len(target_atts_list)
 
-    fi = [0]*nb_target_atts
+    fi = [0] * nb_target_atts
 
     for att in range(nb_target_atts):
-        if (att in metadata['att_types']['numerical']):
-            rf = RandomForestRegressor(n_estimators = 30,
-                                       max_features = 'auto')
+        if att in metadata['att_types']['numerical']:
+            rf = RandomForestRegressor(n_estimators=30,
+                                       max_features='auto')
         else:
             rf = RandomForestClassifier(n_estimators=30,
                                         max_features='auto')
@@ -151,7 +151,7 @@ def get_fi_scores(X, target_atts_list, metadata):
 def labels_to_codes(cluster_labels, target_atts_list):
     nb_models = np.max(cluster_labels) + 1
     nb_atts = cluster_labels.size
-    codes = [[]]*nb_models
+    codes = [[]] * nb_models
 
     # We start with everything descriptive
     for model in range(nb_models):
@@ -159,12 +159,12 @@ def labels_to_codes(cluster_labels, target_atts_list):
 
     for model in range(nb_models):
         for att in range(nb_atts):
-            if (cluster_labels[att] == model):
+            if cluster_labels[att] == model:
                 codes[model][att] = 1
     return codes
 
 
-def random_selection_algo(metadata, settings, target_atts_list = None):
+def random_selection_algo(metadata, settings, target_atts_list=None):
     """
     A random selection algorithm, to evaluate the performance of both the prediction algorithms.
 
@@ -195,12 +195,13 @@ def random_selection_algo(metadata, settings, target_atts_list = None):
     codes = [[]] * nb_models
 
     for it in range(nb_models):
-        # Varying the number of desc atts
+        # Varying the number of desc attributes
         nb_desc_atts = np.random.randint(nb_out_atts, nb_atts - nb_out_atts)
-        # Setting missing attributess
+        # Setting missing attributes
         code = [-1] * nb_atts
         # Setting target attributes
-        for i in range(0, nb_out_atts): code[i] = 1
+        for i in range(0, nb_out_atts):
+            code[i] = 1
         # Setting desc attributes
         for i in range(nb_out_atts, nb_out_atts + nb_desc_atts + 1):
             code[i] = 0
@@ -217,6 +218,7 @@ def random_selection_algo(metadata, settings, target_atts_list = None):
     for i, v in enumerate(occ_as_targ):
         if v == 0:
             models_to_alter = np.random.randint(1, codes.shape[0], size=mean_occ_as_target)
-            for m in models_to_alter: codes[m, i] = 1
+            for m in models_to_alter:
+                codes[m, i] = 1
 
     return codes

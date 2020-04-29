@@ -1,5 +1,3 @@
-import warnings
-
 from ..algo.inference import *
 from ..algo.prediction import recode_strat
 from ..utils.classlabels import collect_classlabels
@@ -460,7 +458,6 @@ def build_ensemble_model(m_list, targ, metadata):
     """
 
     # TODO(elia): This still assumes all attributes as descriptive one for the ensemble
-
     m_desc = [m.atts for m in m_list]
     m_targ = [m.targ for m in m_list]
 

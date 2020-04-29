@@ -1,7 +1,7 @@
 import json
 import os
-import numpy as np
 
+import numpy as np
 from scipy import special
 
 
@@ -66,7 +66,7 @@ def basic_query_algo(atts):
 
     query_targ_sets = [[i] for i in atts if i < 50]
 
-    # All the remaing atts are used as inputs
+    # All the remaining atts are used as inputs
     query_desc_sets = [list(set(atts) - set(qts)) for qts in query_targ_sets]
     query_miss_sets = [[] for i in query_desc_sets]
     return query_desc_sets, query_targ_sets, query_miss_sets
@@ -292,12 +292,11 @@ def make_queries_dict(q_desc,
     :return:
     """
 
-    d = {}
-    d['queries'] = {'desc_sets': q_desc,
-                    'targ_sets': q_targ,
-                    'miss_sets': q_miss,
-                    'keyword': q_keyword,
-                    'param': q_param}
+    d = {'queries': {'desc_sets': q_desc,
+                     'targ_sets': q_targ,
+                     'miss_sets': q_miss,
+                     'keyword': q_keyword,
+                     'param': q_param}}
     return d
 
 
